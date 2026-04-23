@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+п»їimport React, { useState } from 'react';
 
 function App() {
     const [tasks, setTasks] = useState([]);
@@ -19,12 +19,12 @@ function App() {
 
     return (
         <div>
-            <h1>Календарь дедлайнов</h1>
+            <h1>РљР°Р»РµРЅРґР°СЂСЊ РґРµРґР»Р°Р№РЅРѕРІ</h1>
 
             <div>
                 <input
                     type="text"
-                    placeholder="Название задания"
+                    placeholder="РќР°Р·РІР°РЅРёРµ Р·Р°РґР°РЅРёСЏ"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                 />
@@ -33,8 +33,20 @@ function App() {
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
                 />
-                <button onClick={addTask}>Добавить</button>
+                <button onClick={addTask}>Р”РѕР±Р°РІРёС‚СЊ</button>
             </div>
+
+            {tasks.length === 0 ? (
+                <p>РќРµС‚ Р·Р°РґР°РЅРёР№</p>
+            ) : (
+                <ul>
+                    {tasks.map(task => (
+                        <li key={task.id}>
+                            {task.name} - {task.date}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }
