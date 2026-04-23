@@ -17,6 +17,8 @@ function App() {
         setDate('');
     };
 
+    const sortedTasks = [...tasks].sort((a, b) => new Date(a.date) - new Date(b.date));
+
     return (
         <div>
             <h1>Календарь дедлайнов</h1>
@@ -36,11 +38,11 @@ function App() {
                 <button onClick={addTask}>Добавить</button>
             </div>
 
-            {tasks.length === 0 ? (
+            {sortedTasks.length === 0 ? (
                 <p>Нет заданий</p>
             ) : (
                 <ul>
-                    {tasks.map(task => (
+                    {sortedTasks.map(task => (
                         <li key={task.id}>
                             {task.name} - {task.date}
                         </li>
