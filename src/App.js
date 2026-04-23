@@ -20,6 +20,21 @@ function App() {
     return (
         <div>
             <h1>Календарь дедлайнов</h1>
+
+            <div>
+                <input
+                    type="text"
+                    placeholder="Название задания"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+                <input
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                />
+                <button onClick={addTask}>Добавить</button>
+            </div>
         </div>
     );
 }
