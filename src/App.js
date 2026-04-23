@@ -19,6 +19,14 @@ function App() {
 
     const sortedTasks = [...tasks].sort((a, b) => new Date(a.date) - new Date(b.date));
 
+    const isOverdue = (taskDate) => {
+        const taskDateObj = new Date(taskDate);
+        taskDateObj.setHours(0, 0, 0, 0);
+        const todayObj = new Date();
+        todayObj.setHours(0, 0, 0, 0);
+        return taskDateObj < todayObj;
+    };
+
     return (
         <div>
             <h1>Календарь дедлайнов</h1>
@@ -45,6 +53,7 @@ function App() {
                     {sortedTasks.map(task => (
                         <li key={task.id}>
                             {task.name} - {task.date}
+                            {isOverdue(task.date) && <span>Просрочено</span>}
                         </li>
                     ))}
                 </ul>
