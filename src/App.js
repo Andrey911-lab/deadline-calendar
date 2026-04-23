@@ -4,6 +4,7 @@ function App() {
     const [tasks, setTasks] = useState([]);
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
+    const [filter, setFilter] = useState('all');
 
     const addTask = () => {
         if (name === '' || date === '') return;
@@ -17,8 +18,6 @@ function App() {
         setDate('');
     };
 
-    const sortedTasks = [...tasks].sort((a, b) => new Date(a.date) - new Date(b.date));
-
     const isOverdue = (taskDate) => {
         const taskDateObj = new Date(taskDate);
         taskDateObj.setHours(0, 0, 0, 0);
@@ -27,9 +26,36 @@ function App() {
         return taskDateObj < todayObj;
     };
 
+    const isThisWeek = (taskDate) => {
+        const taskDateObj = new Date(taskDate);
+        const todayObj = new Date();
+        const startOfWeek = new Date(todayObj);
+        startOfWeek.setDate(todayObj.getDate() - todayObj.getDay());
+        startOfWeek.setHours(0, 0, 0, 0);
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        endOfWeek.setHours(23, 59, 59, 999);
+        return taskDateObj >= startOfWeek && taskDateObj <= endOfWeek;
+    };
+
+    const today = new Date();
+    const currentDate = today.toLocaleDateString('ru-RU');
+
+    const filteredTasks = tasks.filter(task => {
+        if (filter === 'overdue') return isOverdue(task.date);
+        if (filter === 'week') return isThisWeek(task.date);
+        return true;
+    });
+
+    const filteredAndSorted = [...filteredTasks].sort((a, b) => new Date(a.date) - new Date(b.date));
+
     return (
         <div>
             <h1>Календарь дедлайнов</h1>
+
+            <div>
+                <strong>Сегодня: {currentDate}</strong>
+            </div>
 
             <div>
                 <input
@@ -46,11 +72,17 @@ function App() {
                 <button onClick={addTask}>Добавить</button>
             </div>
 
-            {sortedTasks.length === 0 ? (
+            <div>
+                <button onClick={() => setFilter('all')}>Все</button>
+                <button onClick={() => setFilter('week')}>Текущая неделя</button>
+                <button onClick={() => setFilter('overdue')}>Просроченные</button>
+            </div>
+
+            {filteredAndSorted.length === 0 ? (
                 <p>Нет заданий</p>
             ) : (
                 <ul>
-                    {sortedTasks.map(task => (
+                    {filteredAndSorted.map(task => (
                         <li key={task.id}>
                             {task.name} - {task.date}
                             {isOverdue(task.date) && <span>Просрочено</span>}
